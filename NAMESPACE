@@ -1,0 +1,4 @@
+useDynLib(BSD, .registration=TRUE)
+export(FSARMA.fit,FSARMA.select,FSARMA.pred,FSARMA.auto)
+importFrom(Rcpp, evalCpp)
+import(MASS,parallel)
