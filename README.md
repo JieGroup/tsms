@@ -1,34 +1,32 @@
-# tsms
-Modeling Univariate Time Series with Multiple Seasonality
+# The 'tsms' R package
+The tsms R package introduces a tool box for generalized ARMA model, as well as the MS modeling procedure for univariate time series with multiple seasonality. The MS modeling procedure is a simple while well performed modeling machine for time series with multiple seasonality. It detects potential seasonality orders by Discrete Fourier Transformation (DFT), fits multiple generalized ARMA model parallelly by the BFGS algorithm, and selects the best model by minimizing the information criterion (IC). 
+
+Unlike most of the methods for multiple seasonality, MS doesn't require pre-specification of the seasonality orders (e.g. Weekly, monthly or yearly seasonlity cycles). It's 'automatic' in a way that the user only need to specify the number of seasonlity cycles. From simulation and empirical studies, we claim that MS has superior performance than the benchmark methods (e.g. ARIMA, Facebook Prophet, TBATS), and comparable performance to SOTA methods (e.g. LSTM). 
+
+More details can be referred to https://arxiv.org/abs/2008.12340. Feel free to contact the authors: Tianyang Xie at xie00039@umn.edu, Jie Ding at dingj@umn.edu .
 
 ## Getting Started
-
-First install the devtools package
-
+```{r}
 install.packages("devtools")
 
 library("devtools")
 
-Then install this package
+Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 
-install_github('JieGroup/tsms')
+install_github('TYtianyang/tsms')
+```
+
+
+__Note: For R version > 4.0.0 user, we avoid auto-converting warnings to error issues from older packages (e.g. gridExtra) by the the command:__ 
+
+__Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")__
 
 ## Using This Package
 
-To see the available functions to use, type 
+To see the available function to use, type 
 
+```{r}
 ls("package:tsms")
+```
 
-To see a quick guide of each function, e.g. functionName, run
-
-?functionName
-
-The instructions [here](https://github.com/JieGroup/tsms/blob/master/vignettes/user-guide) provide examples for using this package. 
-
-## Reference
-
-T. Xie, J. Ding, "Time series modeling with multiple seasonality," in preparation.
-
-## Contact
-
-T. Xie "xie00039 at umn dot edu"
+More details could be found in the [user guide](https://github.com/TYtianyang/tsms/blob/master/vignettes/user_guide.pdf)

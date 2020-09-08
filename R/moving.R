@@ -1,4 +1,4 @@
-Moving = function(X,width){
+moving = function(X,width){
   if (width %% 2 == 0){message('Your width is even number!')}
   else{
     trend = filter(X,rep(1/width,width),sides=2)
