@@ -1,6 +1,6 @@
 ---
-title: "Explore generalized ARMA with the tsms R Pacakge"
-author: "Tianyang Xie"
+title: "Explore Generalized ARMA with TSMS"
+author: "Tianyang Xie, Jie Ding"
 date: "09/04/2020"
 output: rmarkdown::html_vignette
 vignette: >
@@ -114,7 +114,7 @@ lines(pred.ts.garma,col='red')
 abline(v=850)
 ```
 
-## MS modeling procedure: Usage
+## MS modeling procedure
 
 Another feature of the 'tsms' R package is the MS modeling procedure for univariate time series with multiple seasonality. Unlike the other methods for multiple seasonality setting, MS doesn't require a pre-determined seasonality periods. It only needs to know how many seasonality cycles should be inferred from the data. The procedure will first suggest potential seasonality periods by performing a Discrete Fourier Transformation based on the number of seasonality periods. Then, it uses a parallel fitting module to fit generalized ARMA models for different parameters. Finally, it select the best model by minimizing IC value and perform forecasting. 
 
@@ -164,48 +164,6 @@ In the end, one can shut down the parallel computing function by setting 'multic
 ```{r}
 result = MS(X=data.ts.garma[1:850],U=100,p_range=c(0:3),q_range=c(0:3),r=2,multicore=F)
 ```
-
-## MS modeling procedure: Emperical Examples
-
-The data comes from the original paper of Facebook Prophet model. It shows daily data for the number of events created on Facebook during the dates from 12/10/2007 to 01/20/2016. Weekly and yearly seasonality are strongly suspected. In this case study, MS will be evaluated 7 times for forecasting the following 200 steps. Three seasonality components are allowed in MS (r = 3).
-
-```{r}
-# parameters specification
-U=600
-p_range = c(0:5)
-q_range = c(0:5)
-r=3
-pred_t = 200
-rpt = 7
-
-# fitting & prediction
-prediction.vec = rep(0,pred_t*rpt)
-X.vec = tail(prop$y,pred_t*rpt)
-
-for (i in 1:rpt){
-  X = as.matrix(prop$y[1:(nrow(prop)-(rpt+1-i)*pred_t)])
-  result = MS(scale(X,scale=F),W=NULL,U=U,p_range=p_range,q_range=q_range,r=r,
-                       blur.out=c(6,6),sar=T,sma=T,sfourier=F,order=1,sfactor=F,pred_t=pred_t,
-                       crit='BC',level=0.05,multicore=T)
-  prediction = result$prediction + mean(X)
-  prediction.vec[(1+(i-1)*pred_t):(i*pred_t)] = tail(prediction,pred_t)
-}
-
-# plotting
-par(mar = c(4,3,1,1) + 0.1,mgp=c(3,0.5,0))
-plot(X.vec,type='l',col='blue',ylab='',xlab='',xaxt='n',yaxt='n',bty='n')
-box(lwd=2)
-axis(1,at=seq(from=0,to=1400,by=200),tck=0.01)
-axis(2,at=seq(from=6,to=13,by=1),tck=0.01)
-abline(v=seq(from=0,by=pred_t,length.out=rpt),lty=2)
-lines(prediction.vec,col='red')
-legend('topright',legend=c('Data','MS'), lwd = 2
-       ,col=c('blue','red'),lty=rep(1,2),cex=1)
-mtext(text = "Time Index",side = 1,line = 1.8)
-mtext(text = 'Value',side = 2, line = 1.8)
-```
-
-
 
 
 
